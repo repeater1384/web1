@@ -20,8 +20,11 @@
 </style>
 </head>
 <body>
-    <h1>식단표가 궁금한 날짜를 선택</h1>
-    <label>날짜 선택 : <input type='date' min="2020-11-01" max="2020-11-30" onchange='print_info()'/> -상병 박일규-</label>
+    <h1>특수전사령부 11월 표준식단 검색</h1>
+    <label>날짜 선택 : 
+		<input type='date' min="2020-11-01" max="2020-11-30" onchange='press_date()'/>
+		<input type='button' value='오늘식단' onclick='press_today()'/>
+	</label>
 	
 	<p><결과></p>
 	<table border="3">
@@ -58,8 +61,8 @@
 			<td id='점심6'></td>
 			<td id='저녁6'></td>
 		</tr>
-	
     </table>
+	<h4>-20201104- 상병 박일규</h4>
 	<script>
 	
 		var all_data = {'2020-11-01 brst':['흑미밥', '생선묵국', '맛김', '돼지고기김치볶음', '깍두기', '우유(백색우유(200ML,연간))'],
@@ -153,27 +156,41 @@
 '2020-11-30 lunc':['자장밥', '짬뽕찌개', '단무지무침', '배추김치', '주스,복숭아(190ml/팩)', '감귤(상품)'],
 '2020-11-30 dinr':['잡곡밥', '햄소시지찌개', '무생채', '피망잡채(피망채볶음)', '갓김치', '유산균 발효 음료']}
 
-
 		
-		
-	
-		function print_info(){
+		function press_date(){
 			var _date = document.querySelector('input[type="date"]').value;
+			print_info(_date);
+			}
+		
+		function press_today(){
+			var today = new Date();
+			today = today.getFullYear() + "-" + ("0"+(today.getMonth()+1)).slice(-2) + "-" + ("0"+today.getDate()).slice(-2);
+			console.log(today);
+			print_info(today);
+		}
+		function print_info(_date){
+			
 			console.log(_date)
 			console.log(all_data[_date+' brst'])
 			for (var idx = 0 ; idx < 6 ; idx++){
 				if(all_data[_date+' brst'][idx]){
 				document.getElementById('아침'+String(idx+1)).innerHTML=all_data[_date+' brst'][idx]
+				}else{
+				document.getElementById('아침'+String(idx+1)).innerHTML=''
 				}
 			}
 			for (var idx = 0 ; idx < 6 ; idx++){
 				if(all_data[_date+' lunc'][idx]){
 				document.getElementById('점심'+String(idx+1)).innerHTML=all_data[_date+' lunc'][idx]
+				}else{
+				document.getElementById('점심'+String(idx+1)).innerHTML=''
 				}
 			}
 			for (var idx = 0 ; idx < 6 ; idx++){
 				if(all_data[_date+' dinr'][idx]){
 				document.getElementById('저녁'+String(idx+1)).innerHTML=all_data[_date+' dinr'][idx]
+				}else{
+				document.getElementById('저녁'+String(idx+1)).innerHTML=''
 				}
 			}
 			
