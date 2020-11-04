@@ -1,173 +1,194 @@
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Calendar with Vanilla Javascript</title>
-  <!--스타일링 추가-->
-  <style>
-    html {
-      height: 100%;
-    }
+<meta charset="utf-8" />
+<title>특전사 군악대 식단표</title>
+<style>
+	table {
+		border-collapse: collapse;
+	}
+	td {
+    padding: 15px 50px;
+    text-align: center;
+	}
 
-    body {
-      height: 100%;
-      margin: 0;
-      position: relative;
-    }
-
-    #calendar {
-      height: 99%;
-      box-sizing: border-box;
-      padding: 0.5%;
-    }
-
-    .calendar__day {
-      display: inline-block;
-      vertical-align: bottom;
-      width: calc(97% / 7);
-      height: calc(98% / 5);
-      box-sizing: border-box;
-      border-radius: 5px;
-      padding: 20px;
-    }
-
-    .horizontalGutter {
-      margin-right: 0.5%;
-    }
-
-    .verticalGutter {
-      margin-top: 0.5%;
-    }
-  </style>
+</style>
 </head>
-
 <body>
-  <div id="calendar"></div>
-  <script>
-    const today = new Date();
-    const setCalendarData = (year, month) => {
-      let calHtml = "";
-      const setDate = new Date(year, month - 1, 1);
-      const firstDay = setDate.getDate();
-      const firstDayName = setDate.getDay();
-      const lastDay = new Date(
-        today.getFullYear(),
-        today.getMonth() + 1,
-        0
-      ).getDate();
-      const prevLastDay = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        0
-      ).getDate();
+    <h1>식단표가 궁금한 날짜를 선택</h1>
+    <label>날짜 선택 : <input type='date' name='userBirthday' value='2020-11-01' onchange='print_info()'/> -상병 박일규-</label>
+	
+	<p><결과></p>
+	<table border="1">
+		<th>아침</th>
+		<th>점심</th>
+		<th>저녁</th>
+		<tr>
+			<td id='아침1'></td>
+			<td id='점심1'></td>
+			<td id='저녁1'></td>
+		</tr>
+		<tr>
+			<td id='아침2'></td>
+			<td id='점심2'></td>
+			<td id='저녁2'></td>
+		</tr>
+		<tr>
+			<td id='아침3'></td>
+			<td id='점심3'></td>
+			<td id='저녁3'></td>
+		</tr>
+		<tr>
+			<td id='아침4'></td>
+			<td id='점심4'></td>
+			<td id='저녁4'></td>
+		</tr>
+		<tr>
+			<td id='아침5'></td>
+			<td id='점심5'></td>
+			<td id='저녁5'></td>
+		</tr>
+		<tr>
+			<td id='아침6'></td>
+			<td id='점심6'></td>
+			<td id='저녁6'></td>
+		</tr>
+	
+    </table>
+	<script>
+	
+		var all_data = {'2020-11-01 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-01 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-01 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-02 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-02 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-02 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-03 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-03 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-03 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-04 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-04 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-04 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-05 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-05 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-05 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-06 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-06 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-06 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-07 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-07 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-07 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-08 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-08 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-08 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-09 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-09 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-09 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-10 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-10 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-10 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-11 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-11 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-11 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-12 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-12 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-12 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-13 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-13 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-13 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-14 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-14 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-14 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-15 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-15 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-15 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-16 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-16 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-16 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-17 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-17 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-17 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-18 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-18 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-18 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-19 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-19 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-19 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-20 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-20 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-20 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-21 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-21 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-21 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-22 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-22 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-22 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-23 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-23 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-23 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-24 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-24 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-24 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-25 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-25 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-25 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-26 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-26 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-26 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-27 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-27 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-27 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-28 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-28 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-28 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-29 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-29 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-29 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치'],
+'2020-11-30 brst':['밥', '쇠고기미역국', '무나물', '두부조림', '배추김치', '우유(백색우유(200ML,연간))'],
+'2020-11-30 lunc':['찹쌀밥', '닭곰탕', '버섯강정', '명태순살조림', '배추김치', '아이스크림 콘,완제품'],
+'2020-11-30 dinr':['부추비빔밥', '근대콩나물조개국', '고구마맛탕', '배추김치']}
 
-      let startDayCount = 1;
-      let lastDayCount = 1;
 
-      for (let i = 0; i < 6; i++) {
-        for (let j = 0; j < 7; j++) {
-          if (i == 0 && j < firstDayName) {
-            if (j == 0) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFB3BB;' class='calendar__day horizontalGutter'><span>${(prevLastDay - (firstDayName - 1) + j)}</span><span></span></div>`;
-            } else if (j == 6) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFB3BB;' class='calendar__day'><span>${(prevLastDay - (firstDayName - 1) + j)}</span><span></span></div>`;
-            } else {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFB3BB;' class='calendar__day horizontalGutter'><span>${(prevLastDay - (firstDayName - 1) + j)}</span><span></span></div>`;
-            }
-          }
-          else if (i == 0 && j == firstDayName) {
-            if (j == 0) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFE0BB;' class='calendar__day horizontalGutter'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            } else if (j == 6) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFE0BB;' class='calendar__day'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            } else {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFE0BB;' class='calendar__day horizontalGutter'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            }
-          }
-          else if (i == 0 && j > firstDayName) {
-            if (j == 0) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFFFBB' class='calendar__day horizontalGutter'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            } else if (j == 6) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFFFBB' class='calendar__day'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            } else {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#FFFFBB' class='calendar__day horizontalGutter'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            }
-          }
-          else if (i > 0 && startDayCount <= lastDay) {
-            if (j == 0) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#BBFFC9;'class='calendar__day horizontalGutter verticalGutter'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            } else if (j == 6) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#BBFFC9;'class='calendar__day verticalGutter'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            } else {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#BBFFC9;'class='calendar__day horizontalGutter verticalGutter'><span>${startDayCount}</span><span id='${year}${month}${setFixDayCount(startDayCount++)}'></span></div>`;
-            }
-          }
-          else if (startDayCount > lastDay) {
-            if (j == 0) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#B9E1FF;' class='calendar__day horizontalGutter verticalGutter'><span>${lastDayCount++}</span><span></span></div>`;
-            } else if (j == 6) {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#B9E1FF;' class='calendar__day verticalGutter'><span>${lastDayCount++}</span><span></span></div>`;
-            } else {
-              // 스타일링을 위한 클래스 추가
-              calHtml +=
-                `<div style='background-color:#B9E1FF;' class='calendar__day horizontalGutter verticalGutter'><span>${lastDayCount++}</span><span></span></div>`;
-            }
-          }
-        }
-      }
-      document
-        .querySelector("#calendar")
-        .insertAdjacentHTML("beforeend", calHtml);
-    };
+		
+		
+	
+		function print_info(){
+			var _date = document.querySelector('input[type="date"]').value;
+			console.log(_date)
+			console.log(all_data[_date+' brst'])
+			for (var idx = 0 ; idx < 6 ; idx++){
+				if(all_data[_date+' brst'][idx]){
+				document.getElementById('아침'+String(idx+1)).innerHTML=all_data[_date+' brst'][idx]
+				}
+			}
+			for (var idx = 0 ; idx < 6 ; idx++){
+				if(all_data[_date+' lunc'][idx]){
+				document.getElementById('점심'+String(idx+1)).innerHTML=all_data[_date+' lunc'][idx]
+				}
+			}
+			for (var idx = 0 ; idx < 6 ; idx++){
+				if(all_data[_date+' dinr'][idx]){
+				document.getElementById('저녁'+String(idx+1)).innerHTML=all_data[_date+' dinr'][idx]
+				}
+			}
+			
+			
+			
 
-    const setFixDayCount = number => {
-      let fixNum = "";
-      if (number < 10) {
-        fixNum = "0" + number;
-      } else {
-        fixNum = number;
-      }
-      return fixNum;
-    };
-
-    if (today.getMonth() + 1 < 10) {
-      setCalendarData(today.getFullYear(), "0" + (today.getMonth() + 1));
-    } else {
-      setCalendarData(today.getFullYear(), "" + (today.getMonth() + 1));
-    }
-  </script>
+			
+		}
+	</script>
 </body>
-
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
