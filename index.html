@@ -26,7 +26,7 @@
 		<input type='button' value='오늘식단' onclick='press_today()'/>
 	</label>
 	
-	<p id='main_date'>결과</p>
+	<h4 id='main_date'>결과</h4>
 	<table border="3">
 		<th>아침</th>
 		<th>점심</th>
@@ -83,7 +83,7 @@
 			
 			console.log(_date)
 			console.log(all_data[_date+' brst'])
-			document.getElementById('main_date').innerHTML = _date
+			document.getElementById('main_date').innerHTML = _date + ' 의 식단!'
 			for (var idx = 0 ; idx < 6 ; idx++){
 				if(all_data[_date+' brst'][idx]){
 				document.getElementById('아침'+String(idx+1)).innerHTML=all_data[_date+' brst'][idx]
